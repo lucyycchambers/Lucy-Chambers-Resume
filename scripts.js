@@ -1,3 +1,4 @@
+// Navigation bar behavior
 document.addEventListener('DOMContentLoaded', () => {
     function updateStickyHeader() {
         const header = document.getElementById("navbar");
@@ -37,80 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observeSections();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    let userToggledMode = false;
-
-    function getCurrentTimeAsPercentage() {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const totalMinutesInDay = 24 * 60;
-        const currentTimeInMinutes = hours * 60 + minutes;
-        const timeAsPercentage = (currentTimeInMinutes / totalMinutesInDay) * 100;
-        if (!userToggledMode) { 
-            updateMode(hours);
-        }
-        return timeAsPercentage;
-    }
-    
-    function toggleMode() {
-        userToggledMode = true;
-        // Toggle between light and dark mode directly
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        if (isDarkMode) {
-            document.body.classList.remove('dark-mode');
-            document.body.classList.add('light-mode');
-            sliderIcon.style.backgroundImage = "url('image/sun.png')";
-        } else {
-            document.body.classList.remove('light-mode');
-            document.body.classList.add('dark-mode');
-            sliderIcon.style.backgroundImage = "url('image/moon.png')";
-        }
-    }
-
-    function updateMode(hours) {
-        const isDayTime = hours >= 6 && hours < 18;
-        document.body.classList.toggle('light-mode', isDayTime);
-        document.body.classList.toggle('dark-mode', !isDayTime);
-
-        const iconUrl = isDayTime ? 'image/sun.png' : 'image/moon.png';
-        sliderIcon.style.backgroundImage = `url('${iconUrl}')`;
-    }
-
-    function positionSliderIcon() {
-        const sliderIcon = document.getElementById('slider-icon');
-        const sliderPath = document.getElementById('slider-path');
-        const percentage = getCurrentTimeAsPercentage() / 100;
-
-        // Get the total length of the SVG path
-        const pathLength = sliderPath.getTotalLength();
-
-        // Calculate the position along the path based on the percentage
-        const point = sliderPath.getPointAtLength(percentage * pathLength);
-
-        // Adjusting for the icon's dimensions to center it on the point
-        const iconOffsetX = sliderIcon.offsetWidth / 2;
-        const iconOffsetY = sliderIcon.offsetHeight / 2;
-
-        // Calculate the position relative to the page
-        const rect = sliderPath.getBoundingClientRect();
-        const offsetX = rect.left + window.scrollX;
-        const offsetY = rect.top + window.scrollY;
-
-        // Set the icon's position
-        sliderIcon.style.left = `${point.x + offsetX - iconOffsetX}px`;
-        sliderIcon.style.top = `${point.y - (sliderIcon.offsetHeight / 2)}px`;
-    }
-    
-    const sliderIcon = document.getElementById('slider-icon');
-    positionSliderIcon(); 
-    window.addEventListener('resize', () => positionSliderIcon(sliderIcon));
-    sliderIcon.addEventListener('click', toggleMode);
-    setInterval(() => positionSliderIcon(sliderIcon), 60000);
-});
-
-
-// Image lightbox
+// Image lightbox behaviour
 (function () {
     const lightbox = document.getElementById('lightbox');
     if (!lightbox) return;
@@ -147,5 +75,198 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.addEventListener('keydown', (e) => {
     if (!lightbox.hidden && (e.key === 'Escape' || e.key === 'Esc')) closeLightbox();
+    });
+})();
+
+
+// Time slider and Mode
+(function() {
+    const container = document.querySelector('.svg-container');
+    if (!container) return;
+
+    const svg  = container.querySelector('svg');
+    const path = container.querySelector('#slider-path');
+    const icon = container.querySelector('#slider-icon');
+    if (!svg || !path || !icon) return;
+
+    const nowPercent = () => {
+        const d = new Date();
+        return (d.getHours() * 60 + d.getMinutes()) / (24 * 60);
+    };
+
+    const isDarkMode = () => document.body.classList.contains('dark-mode');
+    const syncIconWithMode = () => {
+        icon.style.backgroundImage = `url('${isDarkMode() ? 'image/moon.png' : 'image/sun.png'}')`;
+    };
+    const applyDark = () => {
+        document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
+        syncIconWithMode();
+    };
+    const applyLight = () => {
+        document.body.classList.add('light-mode');
+        document.body.classList.remove('dark-mode');
+        syncIconWithMode();
+    };
+    const applyModeBySection = (section) => {
+        if (section === 'sun') applyLight(); else applyDark();
+    };
+
+    const BASELINE_Y = 50;
+    const sectionFromY = (y) => (y <= BASELINE_Y ? 'sun' : 'dark');
+
+    // Positioning
+    function placeIconAtPoint(px, py) {
+        const vb = svg.viewBox.baseVal;
+        icon.style.left = `${(px / vb.width)  * container.clientWidth}px`;
+        icon.style.top  = `${(py / vb.height) * container.clientHeight}px`;
+    }
+    function setIconAt(progress) {
+        progress = Math.max(0, Math.min(1, progress));
+        const L = path.getTotalLength();
+        const p = path.getPointAtLength(progress * L);
+        placeIconAtPoint(p.x, p.y);
+        return { progress, point: p };
+    }
+
+    // State
+    let userToggledMode = false;  // set true after icon tap
+    let userDragged = false;      // disables minute-follow once true
+    let t = nowPercent();
+    ({ progress: t } = setIconAt(t));
+
+    // Initial mode by clock 
+    const applyModeByClock = () => {
+        const hour = new Date().getHours();
+        (hour >= 6 && hour < 18) ? applyLight() : applyDark();
+    };
+    applyModeByClock();
+
+    new MutationObserver(syncIconWithMode).observe(document.body, {
+        attributes: true, attributeFilter: ['class']
+    });
+
+    // Keep icon on curve on resize
+    const ro = new ResizeObserver(() => setIconAt(t));
+    ro.observe(container);
+
+    // Follow current time every minute unless user dragged or manually toggled
+    const minuteTimer = setInterval(() => {
+        if (!userDragged) {
+        ({ progress: t } = setIconAt(nowPercent()));
+        }
+        if (!userToggledMode) applyModeByClock(); else syncIconWithMode();
+    }, 60_000);
+
+    // Drag vs Click handling
+    const DRAG_THRESHOLD = 5;
+    let startX = 0, startY = 0, dragging = false, activePointerId = null;
+    let startedOnIcon = false;
+
+    let startSection = null;      
+    let followingBySection = false;
+
+    function onPointerDown(e) {
+        if (activePointerId !== null) return;
+        activePointerId = e.pointerId;
+
+        e.preventDefault();
+        startedOnIcon = (e.target === icon);
+        container.setPointerCapture(activePointerId);
+
+        startX = e.clientX; startY = e.clientY; dragging = false;
+
+        const { point, progress } = moveToEventX(e);
+        t = progress;
+        startSection = sectionFromY(point.y);
+        followingBySection = false;
+
+        container.addEventListener('pointermove', onPointerMove, { passive: false });
+        container.addEventListener('pointerup', onPointerUp, { once: true });
+        container.addEventListener('pointercancel', onPointerUp, { once: true });
+    }
+
+    function onPointerMove(e) {
+        if (e.pointerId !== activePointerId) return;
+
+        if (!dragging) {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.hypot(dx, dy) >= DRAG_THRESHOLD) dragging = true;
+        }
+
+        e.preventDefault();
+        userDragged = true;
+
+        const { point, progress } = moveToEventX(e);
+        t = progress;
+
+        const currentSection = sectionFromY(point.y);
+
+        if (!followingBySection && currentSection !== startSection) {
+        followingBySection = true;
+        }
+
+        if (followingBySection) {
+        applyModeBySection(currentSection);
+        } else {
+        syncIconWithMode();
+        }
+    }
+
+    function onPointerUp(e) {
+        if (e.pointerId !== activePointerId) return;
+        try { container.releasePointerCapture(activePointerId); } catch {}
+        activePointerId = null;
+
+        container.removeEventListener('pointermove', onPointerMove);
+
+        if (!dragging) {
+        const lastSection = sectionFromY(
+            path.getPointAtLength(t * path.getTotalLength()).y
+        );
+        if (startedOnIcon) {
+            // Tap on icon => explicit toggle (lock)
+            userToggledMode = true;
+            isDarkMode() ? applyLight() : applyDark();
+        } else {
+            // Tap on path => snap & set to that section; unlock
+            userToggledMode = false;
+            applyModeBySection(lastSection);
+        }
+        } else {
+        // After a drag, unlock manual mode so future time/drag can manage mode
+        userToggledMode = false;
+        }
+
+        startedOnIcon = false;
+    }
+
+    // Map event X to progress along path, return both point and progress
+    function moveToEventX(e) {
+        const rect = container.getBoundingClientRect();
+        const xPx = Math.min(Math.max(e.clientX - rect.left, 0), rect.width);
+        const vb  = svg.viewBox.baseVal;
+        const xInVb = (xPx / rect.width) * vb.width;
+
+        const L = path.getTotalLength();
+        let lo = 0, hi = L;
+        for (let i = 0; i < 20; i++) {
+        const mid = (lo + hi) / 2;
+        const p = path.getPointAtLength(mid);
+        if (p.x < xInVb) lo = mid; else hi = mid;
+        }
+        const point = path.getPointAtLength(hi);
+        placeIconAtPoint(point.x, point.y);
+        return { point, progress: hi / L };
+    }
+
+    container.addEventListener('pointerdown', onPointerDown, { passive: false });
+    icon.addEventListener('pointerdown', onPointerDown, { passive: false });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        clearInterval(minuteTimer);
+        ro.disconnect();
     });
 })();

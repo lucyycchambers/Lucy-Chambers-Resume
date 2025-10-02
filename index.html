@@ -20,9 +20,9 @@
     </nav>
   </header>
   <main>
-    <section id="hero">
-    <img src="image/selfImage.jpeg" alt="Lucy Chambers" class="profile-pic">
-      <h3>Hi, I'm Lucy Chambers</h3>
+    <section id="hero" class="hero">
+      <img src="image/selfImage.jpeg" alt="Lucy Chambers Picture" class="profile-pic" />
+      <h3 class="hero-title">Hi, I'm Lucy Chambers</h3>
     </section>
     <section id="about" class="card">
         <h2>About Me</h2>
@@ -57,8 +57,8 @@
           <li>Extended Major in Computer Science, Minor in Psychology</li>
           <li>Dean's Commendation for Academic Excellence</li>
           <li>Academic References:
-            <p><a href="UQ-Letter-Lucy.pdf" target="_blank" class="reference-view">Letter 1 (PDF) - Click Here</a></p>
-            <p><a href="UQ-Letter-Lucy2.pdf" target="_blank" class="reference-view">Letter 2 (PDF) - Click Here</a></p>
+            <p><a href="UQ-Letter-Lucy.pdf" target="_blank" class="download-button">Letter 1 (PDF) - Click Here</a></p>
+            <p><a href="UQ-Letter-Lucy2.pdf" target="_blank" class="download-button">Letter 2 (PDF) - Click Here</a></p>
           </li>
         </ul>
       </div>
@@ -106,7 +106,7 @@
           Designed for easy navigation for guests to find venue info, respond to invitations, and view gallery.
           <br><em>Some details have been changed to respect the couple's privacy.</em><br>
         </p>
-        <a href="https://lucyycchambers.github.io/OliviaxKumail/" target="_blank" class="project-link">View Project</a>
+        <a href="https://lucyycchambers.github.io/OliviaxKumail/" target="_blank" class="download-button">View Project</a>
       </div>
     
       <div class="project-entry">
@@ -117,7 +117,7 @@
           Simple, responsive website for a small construction business. 
           It includes service information and an interactive gallery to showcase past projects.
           <br></p>
-        <a href="https://lucyycchambers.github.io/Chambers-Constructions/" target="_blank" class="project-link">View Project</a>
+        <a href="https://lucyycchambers.github.io/Chambers-Constructions/" target="_blank" class="download-button">View Project</a>
       </div>
 
       <div class="project-entry">
@@ -127,7 +127,7 @@
         <p>
           Ongoing updates and maintaince of a business website (Note: Original deisgn not mine. I designed the Hire Rates page only).
           <br></p>
-        <a href="https://www.snow.com.au" target="_blank" class="project-link">View Project</a>
+        <a href="https://www.snow.com.au" target="_blank" class="download-button">View Project</a>
       </div>
 
       <div class="project-entry">
@@ -180,7 +180,7 @@
     <h2>Contact Details</h2>
     <p>Phone: +61 407 451 555</p>
     <p>Email: lucyycchambers@gmail.com</p>
-    <p><a href="resume.pdf" target="_blank" class="resume-download">View My Resume (PDF)</a></p>
+    <p><a href="resume.pdf" target="_blank" class="download-button">View My Resume (PDF)</a></p>
 </section>
 </main>
 
@@ -192,17 +192,21 @@
 
 <!-- Daytime / Nighttime Display -->
 <footer>
-  <div id="time-container">
-    <svg width="400" height="100">
-      <line id="slider-line" x1="0" y1="50" x2="400" y2="50"/>
-        <!-- Cosine curve -->
-        <path id="slider-path" d="M0 90 
-        C 0 90, 10 90, 100 50 
-        C 190 0, 210 0, 300 50 
-        C 370 90, 400 90, 400 90"/>
+<div class="svg-wrap">
+  <div class="svg-container">
+    <svg viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet">
+      <line id="slider-line" x1="0" y1="50" x2="400" y2="50"
+            stroke="currentColor" stroke-width="2" fill="none"/>
+      <path id="slider-path" d="M0 90
+        C 0 90, 10 90, 100 50
+        C 190 0, 210 0, 300 50
+        C 370 90, 400 90, 400 90"
+        stroke="currentColor" stroke-width="2" fill="none"/>
     </svg>
     <div id="slider-icon" class="slider-icon"></div>
-    </div>
+  </div>
+</div>
+
   <p>&copy; 2025 Lucy Chambers</p>
 </footer>
 <script src="scripts.js"></script>
