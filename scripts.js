@@ -102,10 +102,50 @@ document.addEventListener('DOMContentLoaded', () => {
         sliderIcon.style.top = `${point.y - (sliderIcon.offsetHeight / 2)}px`;
     }
     
-
     const sliderIcon = document.getElementById('slider-icon');
     positionSliderIcon(); 
     window.addEventListener('resize', () => positionSliderIcon(sliderIcon));
     sliderIcon.addEventListener('click', toggleMode);
     setInterval(() => positionSliderIcon(sliderIcon), 60000);
 });
+
+
+// Image lightbox
+(function () {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    const imgEl = lightbox.querySelector('.lightbox__img');
+    const closeBtn = lightbox.querySelector('.lightbox__close');
+
+    function openLightbox(src, alt) {
+        imgEl.src = src;
+        imgEl.alt = alt || 'Project image preview';
+        lightbox.hidden = false;
+        document.body.classList.add('no-scroll');
+        closeBtn.focus();
+    }
+
+    function closeLightbox() {
+        lightbox.hidden = true;
+        imgEl.removeAttribute('src');
+        imgEl.removeAttribute('alt');
+        document.body.classList.remove('no-scroll');
+    }
+
+    // Open when clicking any project image
+    document.querySelectorAll('.project-image').forEach(img => {
+        img.addEventListener('click', () => openLightbox(img.src, img.alt));
+    });
+    
+    // Close interactions
+    closeBtn.addEventListener('click', closeLightbox);
+    imgEl.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+    if (!lightbox.hidden && (e.key === 'Escape' || e.key === 'Esc')) closeLightbox();
+    });
+})();

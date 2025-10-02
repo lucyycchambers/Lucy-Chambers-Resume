@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lucy Chambers</title>
+<title>Lucy Chambers - Resume</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
@@ -29,7 +29,7 @@
         <p>I'm a final-year Bachelor of Science (Computer Science) student at The University of Queensland, graduating in November 2025. 
           I have a strong foundation in full-stack web development, algorithms, databases, and data science, 
           with a minor in Psychology that gives me a better understanding of how people interact with technology and make decisions. 
-          I’m looking for a graduate role where I can apply my expertise while continuing to develop my skills.
+          I'm looking for a graduate role where I can continue learning and contribute where I'm needed. 
           I learn quickly and enjoy working both independently and as part of a team.
         </p>
       
@@ -37,9 +37,11 @@
         <!-- Technical Skills -->
         <div class="skills-section">
             <ul class="skills-list">
-                <li><i class="fas fa-code"></i> Python, Java, JavaScript, C, Dafny</li>
-                <li><i class="fab fa-react"></i> HTML, CSS, React Web and Native, CodeIgniter 4</li>
-                <li><i class="fas fa-database"></i> PHP, SQL (MySQL, PostgreSQL)</li>
+              <li><i class="fas fa-code"></i> Python, Java, JavaScript, C, Dafny</li>
+              <li><i class="fab fa-react"></i> HTML, CSS, React (Web & Native), CodeIgniter 4</li>
+              <li><i class="fas fa-database"></i> PHP, SQL (MySQL, PostgreSQL)</li>
+              <li><i class="fas fa-book"></i> Jupyter Notebooks (NumPy, pandas, Matplotlib)</li>
+              <li><i class="fas fa-cloud"></i> Cloud & DevOps: AWS (EC2, S3), GCP, Docker</li>
               <li><i class="fas fa-laptop-code"></i> Microsoft Office</li>
             </ul>
         </div>
@@ -55,11 +57,20 @@
           <li>Extended Major in Computer Science, Minor in Psychology</li>
           <li>Dean's Commendation for Academic Excellence</li>
           <li>Academic References:
-            <p><a href="UQ-Letter-Lucy.pdf" target="_blank" class="reference-view">Letter 1 - Click Here</a></p>
-            <p><a href="UQ-Letter-Lucy2.pdf" target="_blank" class="reference-view">Letter 2 - Click Here</a></p>
+            <p><a href="UQ-Letter-Lucy.pdf" target="_blank" class="reference-view">Letter 1 (PDF) - Click Here</a></p>
+            <p><a href="UQ-Letter-Lucy2.pdf" target="_blank" class="reference-view">Letter 2 (PDF) - Click Here</a></p>
           </li>
         </ul>
       </div>
+
+      <div class="education-entry">
+        <h3>Certificate III, Design Fundamentals (Undertaking)</h3>
+        <ul>
+          <li>Foundations in colour, typography, layout, drawing, and the creative design process.</li>
+          <li>Applying design theory and practice across 2D/3D forms and digital presentations.</li>
+        </ul>
+      </div>
+
       <div class="education-entry">
         <h3>Certificate III, Business Administration - 2019</h3>
         <ul>
@@ -91,8 +102,8 @@
         <p>HTML, CSS, JavaScript | Designer & Developer</p>
         <img src="image/oliviaProject.png" alt="Project Name" class="project-image">
         <p>
-          Built a custom wedding website for a couple to share event details, RSVP form, and photos from the day. 
-          The site made it easy for guests to find venue info, respond to invitations, and view a curated gallery.
+          Custom wedding website with event details, RSVP form, and curated photo gallery. 
+          Designed for easy navigation for guests to find venue info, respond to invitations, and view gallery.
           <br><em>Some details have been changed to respect the couple's privacy.</em><br>
         </p>
         <a href="https://lucyycchambers.github.io/OliviaxKumail/" target="_blank" class="project-link">View Project</a>
@@ -103,10 +114,20 @@
         <p>HTML, CSS, JavaScript | Designer & Developer</p>
         <img src="image/chambersProject.png" alt="Project Name" class="project-image">
         <p>
-          Designed and developed a simple, responsive website for a small construction business. 
-          It includes service information and an interactive gallery of past projects to help potential clients understand what the business offers.
+          Simple, responsive website for a small construction business. 
+          It includes service information and an interactive gallery to showcase past projects.
           <br></p>
         <a href="https://lucyycchambers.github.io/Chambers-Constructions/" target="_blank" class="project-link">View Project</a>
+      </div>
+
+      <div class="project-entry">
+        <h3>Fleets Sportsworld Berridale</h3>
+        <p>HTML, CSS, JavaScript | Developer</p>
+        <img src="image/fleets.png" alt="Project Name" class="project-image">
+        <p>
+          Ongoing updates and maintaince of a business website (Note: Original deisgn not mine. I designed the Hire Rates page only).
+          <br></p>
+        <a href="https://www.snow.com.au" target="_blank" class="project-link">View Project</a>
       </div>
 
       <div class="project-entry">
@@ -114,8 +135,8 @@
         <p>CodeIgniter, MySQL | Full Stack Developer</p>
         <img src="image/surveyProject.png" alt="Project Name" class="project-image">
         <img src="image/surveyProject2.png" alt="Project Name" class="project-image">
-        <p>Developed a responsive web application for creating and managing surveys, as part of INFS3202 (Web Information Systems). 
-          Featured real-time analytics, QR code responses, secure authentication (Google/GitHub logins), and data visualisation.</p>
+        <p>Responsive web application for creating and managing surveys, as part of INFS3202 (Web Information Systems). 
+          Features real-time analytics, QR responses, secure authentication (Google/GitHub logins), and data visualisation.</p>
       </div>
     </section>
 
@@ -156,12 +177,18 @@
 
 <!-- Contact Details -->
 <section id="contact" class="card">
-    <h2>Contact Info</h2>
+    <h2>Contact Details</h2>
     <p>Phone: +61 407 451 555</p>
     <p>Email: lucyycchambers@gmail.com</p>
-    <p><a href="resume.pdf" target="_blank" class="resume-download">View My Resume</a></p>
+    <p><a href="resume.pdf" target="_blank" class="resume-download">View My Resume (PDF)</a></p>
 </section>
 </main>
+
+<!-- Image Lightbox -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image preview" hidden>
+  <button class="lightbox__close" aria-label="Close preview">&times;</button>
+  <img class="lightbox__img" alt="">
+</div>
 
 <!-- Daytime / Nighttime Display -->
 <footer>
@@ -179,5 +206,10 @@
   <p>&copy; 2025 Lucy Chambers</p>
 </footer>
 <script src="scripts.js"></script>
+
 </body>
 </html>
+
+
+
+
